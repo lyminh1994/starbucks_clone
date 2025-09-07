@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:starbucks_clone/screens/cards_screen.dart';
+import 'package:starbucks_clone/screens/gift_screen.dart';
+import 'package:starbucks_clone/screens/order_screen.dart';
+import 'package:starbucks_clone/screens/store_screen.dart';
+import 'package:starbucks_clone/widgets/nav_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,55 +23,80 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Widget screen;
+    switch (_currentIndex) {
+      case 0:
+        screen = HomeScreen();
+        break;
+      case 1:
+        screen = CardScreen();
+        break;
+      case 2:
+        screen = OrderScreen();
+        break;
+      case 3:
+        screen = GiftScreen();
+        break;
+      case 4:
+        screen = StoreScreen();
+        break;
+      default:
+        throw UnimplementedError('no widget for $_currentIndex');
+    }
+
+    var colorScheme = Theme.of(context).colorScheme;
+    var mainArea = ColoredBox(
+      color: colorScheme.surfaceContainerHighest,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: screen,
+      ),
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
-      ),
-      body: const Center(
-        child: Text('Welcome to the App!'),
-      ),
+      body: screen,
       bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
+        shape: CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(0, Icons.star, 'Home'),
-            _buildNavItem(1, Icons.credit_card, 'Cards'),
-            _buildNavItem(2, Icons.local_drink, 'Order'),
-            _buildNavItem(3, Icons.card_giftcard, 'Gift'),
-            _buildNavItem(4, Icons.store, 'Store'),
+            NavItem(
+              index: 0,
+              currentIndex: _currentIndex,
+              icon: Icons.star,
+              label: 'Home',
+              onTabTapped: _onTabTapped,
+            ),
+            NavItem(
+              index: 1,
+              currentIndex: _currentIndex,
+              icon: Icons.credit_card,
+              label: 'Cards',
+              onTabTapped: _onTabTapped,
+            ),
+            NavItem(
+              index: 2,
+              currentIndex: _currentIndex,
+              icon: Icons.local_drink,
+              label: 'Order',
+              onTabTapped: _onTabTapped,
+            ),
+            NavItem(
+              index: 3,
+              currentIndex: _currentIndex,
+              icon: Icons.card_giftcard,
+              label: 'Gift',
+              onTabTapped: _onTabTapped,
+            ),
+            NavItem(
+              index: 4,
+              currentIndex: _currentIndex,
+              icon: Icons.store,
+              label: 'Store',
+              onTabTapped: _onTabTapped,
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData iconData, String label) {
-    bool isActive = index == _currentIndex;
-    Color activeColor = Colors.blue; // Customize the active icon color here
-    Color inactiveColor = Colors.grey; // Customize the inactive icon color here
-
-    return InkWell(
-      highlightColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      onTap: () => _onTabTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            iconData,
-            size: 24,
-            color: isActive ? activeColor : inactiveColor,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isActive ? activeColor : inactiveColor,
-            ),
-          ),
-        ],
       ),
     );
   }
