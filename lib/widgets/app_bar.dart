@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppBar extends StatelessWidget {
   const AppBar({super.key});
 
